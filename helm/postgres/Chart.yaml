@@ -1,0 +1,6 @@
+apiVersion: v2
+name: postgres
+description: Minimal ephemeral Postgres for infra-lab (RDS substitute, $0, emptyDir)
+type: application
+version: 0.1.0
+appVersion: "16"
