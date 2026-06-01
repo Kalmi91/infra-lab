@@ -1,0 +1,22 @@
+# Official Postgres image (Docker Hub) — no vendor-chart / image-registry risk.
+image:
+  repository: postgres
+  tag: "16-alpine"
+  pullPolicy: IfNotPresent
+
+# Demo credentials. This is a local $0 lab, not production — in a real setup
+# these would come from a secrets manager, not values.
+auth:
+  database: appdb
+  username: app
+  password: app-password
+
+service:
+  port: 5432
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    memory: 256Mi

@@ -64,6 +64,17 @@ way?").
   never block on a runtime the agent can't reach.
 - **Trade-off:** End-to-end verification is deferred to the user's `make up`.
 
+## ADR-009 — Local Postgres Helm chart over the Bitnami chart
+- **Context:** Need a Postgres (RDS substitute). The plan suggested
+  `bitnami/postgresql`.
+- **Decision:** Author a minimal local Helm chart (`helm/postgres/`) using the
+  official `postgres:16-alpine` Docker Hub image.
+- **Consequence:** No dependency on the Bitnami chart/registry (which changed
+  distribution + added auth/legacy repos in 2025), full control of the manifests,
+  and it demonstrates **Helm chart authoring** (an explicit learning goal).
+- **Trade-off:** Fewer features than the Bitnami chart (no HA, backups, metrics
+  exporter). Not needed for a $0 ephemeral demo; would revisit for production.
+
 ## ADR-008 — GitHub Actions for CI
 - **Context:** Existing experience is Jenkins; the gap analysis flagged
   GitHub Actions as a missing skill.
