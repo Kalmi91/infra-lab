@@ -27,17 +27,24 @@ building a complete, reproducible cloud-style environment.
 
 ## Architecture
 
+```mermaid
+flowchart TB
+  tf["Terraform"] -->|"AWS API @ localhost:4566"| ls["LocalStack<br/>VPC · IAM · S3"]
+  helm["Helm"] --> prom & graf & pg & app
+  k6["k6 load test"] -->|"HTTP"| app
+
+  subgraph host["Host laptop (Docker)"]
+    ls
+    subgraph cluster["kind cluster"]
+      app["demo-app"] -->|"/metrics"| prom["Prometheus"]
+      prom --> graf["Grafana<br/>(dashboards)"]
+      app --> pg[("Postgres")]
+    end
+  end
 ```
-                 ┌─────────────── kind cluster (Docker) ───────────────┐
-                 │                                                      │
-  Terraform ──►  │  Helm: Prometheus ──┐                               │
-   │   │         │        Grafana   ◄──┘ (dashboards)                  │
-   │   │         │        Postgres                                      │
-   │   │         │        demo-app   ◄── k6 load test ──► metrics      │
-   │   │         └──────────────────────────────────────────────────┘
-   │   └──► LocalStack (Docker): VPC · IAM · S3
-   └─────► everything is code, nothing is clicked
-```
+
+> Everything is code: `make up` builds it, `make down` destroys it. Nothing is
+> clicked, nothing is left running.
 
 ## Prerequisites (the host runs these — see `scripts/bootstrap.sh`)
 
