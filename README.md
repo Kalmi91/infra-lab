@@ -77,3 +77,32 @@ infra-lab/
 - **Week 4** — Prometheus + Grafana stack, wire app metrics, build a dashboard.
 - **Week 5** — k6 load tests feeding results into Grafana.
 - **Week 6** — GitHub Actions CI, polish README + architecture diagram.
+
+## More docs
+
+- [`BUILD.md`](BUILD.md) — live status %, build queue, build contract (load this to resume).
+- [`docs/DECISIONS.md`](docs/DECISIONS.md) — why each choice was made (ADR-lite).
+- [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md) — CV bullets, interview talking points, demo script.
+
+## Cost guard
+
+This project **never touches real AWS** — every AWS call goes to LocalStack on
+`localhost:4566`, so the bill is **$0** and no credit card is involved. If you
+ever switch `terraform/provider.tf` to real AWS:
+
+- Run `make down` (or `terraform destroy`) after **every** session — EKS/RDS/ALB
+  bill by the hour.
+- Set an **AWS Budgets** alarm at ~$1 before applying anything.
+- Never commit real credentials; use `aws configure` / env vars.
+
+## Troubleshooting
+
+| Symptom | Fix |
+| ------- | --- |
+| `Cannot connect to the Docker daemon` | `sudo systemctl start docker` (or `sudo service docker start`); ensure you are in the `docker` group (`newgrp docker`). |
+| `terraform` cannot reach `:4566` | LocalStack not up — `localstack status`; start with `make localstack-up`. |
+| Port `4566` already in use | A LocalStack is already running — `localstack stop` or reuse it. |
+| `kind create cluster` fails on image pull | Network/Docker issue; retry, or `docker pull kindest/node` first. |
+| `helm ... --wait` times out | Inspect pods: `kubectl get pods -n monitoring`; describe the pending one. |
+| Grafana port-forward refused | Pods not ready yet — wait for `kubectl get pods -n monitoring` to be `Running`. |
+| `command not found: terraform/kind/k6` | `~/.local/bin` not on PATH — see `scripts/bootstrap.sh` output. |
