@@ -1,0 +1,24 @@
+image:
+  repository: infra-lab-demo-app
+  tag: dev
+  pullPolicy: IfNotPresent
+
+replicas: 1
+
+service:
+  port: 8080
+
+# DSN for the postgres chart's Service (in the `data` namespace).
+databaseUrl: "postgres://app:app-password@postgres.data.svc.cluster.local:5432/appdb?sslmode=disable"
+
+# Create a ServiceMonitor so kube-prometheus-stack scrapes /metrics (Q4).
+serviceMonitor:
+  enabled: true
+  interval: 15s
+
+resources:
+  requests:
+    cpu: 25m
+    memory: 32Mi
+  limits:
+    memory: 64Mi
