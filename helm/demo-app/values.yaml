@@ -16,6 +16,10 @@ serviceMonitor:
   enabled: true
   interval: 15s
 
+# Ship a Grafana dashboard as a sidecar-discovered ConfigMap (Q5).
+dashboard:
+  enabled: true
+
 resources:
   requests:
     cpu: 25m
