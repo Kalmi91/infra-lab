@@ -1,15 +1,23 @@
-.PHONY: help up down test dashboard localstack-up kind-up tf-apply tf-destroy helm-monitoring helm-postgres
+.PHONY: help up down test dashboard localstack-up kind-up tf-apply tf-destroy helm-monitoring helm-postgres app-deploy
 
 CLUSTER ?= infra-lab
 HELM_NS ?= monitoring
 DATA_NS ?= data
+APP_NS ?= demo
+IMAGE ?= infra-lab-demo-app:dev
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
 	  awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-14s\033[0m %s\n",$$1,$$2}'
 
-up: localstack-up kind-up tf-apply helm-monitoring helm-postgres ## Start LocalStack + kind, apply Terraform, install monitoring + postgres
+up: localstack-up kind-up tf-apply helm-monitoring helm-postgres app-deploy ## Full stack: LocalStack + kind + Terraform + monitoring + postgres + app
 	@echo "Stack up. Next: make dashboard / make test"
+
+app-deploy: ## Build the Go demo-app image, load into kind, helm install
+	docker build -t $(IMAGE) app
+	kind load docker-image $(IMAGE) --name $(CLUSTER)
+	helm upgrade --install demo-app helm/demo-app \
+	  --namespace $(APP_NS) --create-namespace --wait --timeout 5m
 
 helm-monitoring: ## Install kube-prometheus-stack (Prometheus + Grafana)
 	helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
