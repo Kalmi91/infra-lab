@@ -1,4 +1,4 @@
-.PHONY: help up down test dashboard localstack-up kind-up tf-apply tf-destroy helm-monitoring helm-postgres app-deploy
+.PHONY: help up down test dashboard app-forward localstack-up kind-up tf-apply tf-destroy helm-monitoring helm-postgres app-deploy
 
 CLUSTER ?= infra-lab
 HELM_NS ?= monitoring
@@ -44,7 +44,11 @@ tf-apply: ## terraform init + apply against LocalStack
 tf-destroy: ## terraform destroy
 	cd terraform && terraform destroy -auto-approve
 
-test: ## Run the k6 load test
+app-forward: ## Port-forward the demo-app to http://localhost:8080 (for k6)
+	@echo "demo-app on http://localhost:8080 — leave running, run 'make test' in another shell."
+	kubectl port-forward -n $(APP_NS) svc/demo-app 8080:8080
+
+test: ## Run the k6 load test (needs 'make app-forward' running)
 	k6 run k6-tests/load.js
 
 dashboard: ## Port-forward Grafana to http://localhost:3000
