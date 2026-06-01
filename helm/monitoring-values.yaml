@@ -1,0 +1,65 @@
+# Values for the kube-prometheus-stack Helm chart, tuned for a local kind
+# cluster ($0, no persistent volumes, lean footprint).
+#
+#   helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+#   helm upgrade --install monitoring prometheus-community/kube-prometheus-stack \
+#     -n monitoring --create-namespace -f helm/monitoring-values.yaml --wait
+#
+# (the `make helm-monitoring` target wraps this)
+
+# --- Alertmanager: off -------------------------------------------------------
+# Not needed for the portfolio demo; saves a pod + resources.
+alertmanager:
+  enabled: false
+
+# --- Control-plane scrape targets: off in kind -------------------------------
+# kind does not expose these on the host network, so leaving them enabled just
+# produces permanently "down" targets. Disable to keep Prometheus targets green.
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeEtcd:
+  enabled: false
+kubeProxy:
+  enabled: false
+
+# --- Prometheus --------------------------------------------------------------
+prometheus:
+  prometheusSpec:
+    retention: 6h
+    # No storageSpec => emptyDir. Metrics are ephemeral, which is fine locally
+    # and means no PVC / storage class is required ($0).
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        memory: 512Mi
+    # Discover ServiceMonitors created outside this release (e.g. the demo app).
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+
+# --- node exporter + kube-state-metrics: keep (cheap, useful) ----------------
+prometheus-node-exporter:
+  resources:
+    requests:
+      cpu: 20m
+      memory: 32Mi
+
+# --- Grafana -----------------------------------------------------------------
+grafana:
+  # fullnameOverride makes the Service "grafana" so `make dashboard`
+  # (kubectl port-forward svc/grafana) works regardless of release name.
+  fullnameOverride: grafana
+  adminPassword: prom-operator
+  defaultDashboardsEnabled: true
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
+  # Persist nothing — dashboards come from the chart + provisioning.
+  persistence:
+    enabled: false
