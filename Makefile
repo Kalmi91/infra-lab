@@ -1,13 +1,21 @@
-.PHONY: help up down test dashboard localstack-up kind-up tf-apply tf-destroy
+.PHONY: help up down test dashboard localstack-up kind-up tf-apply tf-destroy helm-monitoring
 
 CLUSTER ?= infra-lab
+HELM_NS ?= monitoring
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
 	  awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-14s\033[0m %s\n",$$1,$$2}'
 
-up: localstack-up kind-up tf-apply ## Start LocalStack + kind, apply Terraform
+up: localstack-up kind-up tf-apply helm-monitoring ## Start LocalStack + kind, apply Terraform, install monitoring
 	@echo "Stack up. Next: make dashboard / make test"
+
+helm-monitoring: ## Install kube-prometheus-stack (Prometheus + Grafana)
+	helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+	helm repo update prometheus-community
+	helm upgrade --install monitoring prometheus-community/kube-prometheus-stack \
+	  --namespace $(HELM_NS) --create-namespace \
+	  -f helm/monitoring-values.yaml --wait --timeout 10m
 
 localstack-up: ## Start LocalStack (Docker) on :4566
 	localstack start -d
