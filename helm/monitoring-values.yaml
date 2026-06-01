@@ -63,3 +63,10 @@ grafana:
   # Persist nothing — dashboards come from the chart + provisioning.
   persistence:
     enabled: false
+  # The dashboard sidecar imports ConfigMaps labeled grafana_dashboard from ANY
+  # namespace (the demo-app dashboard lives in the app's namespace).
+  sidecar:
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
+      searchNamespace: ALL
