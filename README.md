@@ -1,7 +1,6 @@
 # infra-lab
 
-Portfolio project #1 of 3 for the CDMX DevOps job search. Goal: learn and
-demonstrate **Terraform + AWS + Kubernetes + monitoring + load testing** by
+Demonstrates **Terraform + AWS + Kubernetes + monitoring + load testing** by
 building a complete, reproducible cloud-style environment.
 
 > **$0 by design.** The whole stack runs locally — no AWS bill, no credit-card
@@ -49,8 +48,7 @@ flowchart TB
 ## Prerequisites (the host runs these — see `scripts/bootstrap.sh`)
 
 The Docker daemon, kind, LocalStack, Terraform, kubectl and k6 must run on the
-host shell (they need the Docker socket, which is not available inside the
-Claude Code sandbox). Run the bootstrap once:
+host shell (they need the Docker socket). Run the bootstrap once:
 
 ```bash
 ./scripts/bootstrap.sh        # installs tools to ~/.local/bin, starts Docker
@@ -87,9 +85,7 @@ infra-lab/
 
 ## More docs
 
-- [`BUILD.md`](BUILD.md) — live status %, build queue, build contract (load this to resume).
 - [`docs/DECISIONS.md`](docs/DECISIONS.md) — why each choice was made (ADR-lite).
-- [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md) — CV bullets, interview talking points, demo script.
 
 ## Cost guard
 

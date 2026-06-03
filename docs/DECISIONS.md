@@ -1,8 +1,7 @@
 # Decisions (ADR-lite)
 
 Short architecture decision records. Each: context → decision → consequence →
-trade-off. These double as interview talking points ("why did you build it this
-way?").
+trade-off.
 
 ## ADR-001 — LocalStack instead of real AWS
 - **Context:** Portfolio/learning project with a hard $0 budget and zero
@@ -54,15 +53,6 @@ way?").
 - **Decision:** Disable those ServiceMonitors in values.
 - **Consequence:** Prometheus targets stay green — a clean demo.
 - **Trade-off:** Less control-plane visibility; irrelevant on kind anyway.
-
-## ADR-007 — Agent writes code, user runs the runtime
-- **Context:** The Claude Code sandbox (bwrap namespace) has no Docker socket,
-  cannot start a daemon, and ~/.local/bin is write-denied.
-- **Decision:** Claude/Sonnet authors all code + offline checks; the user runs
-  Docker/kind/LocalStack/terraform-apply on the host shell.
-- **Consequence:** Token-burn build sessions stay productive (code only) and
-  never block on a runtime the agent can't reach.
-- **Trade-off:** End-to-end verification is deferred to the user's `make up`.
 
 ## ADR-009 — Local Postgres Helm chart over the Bitnami chart
 - **Context:** Need a Postgres (RDS substitute). The plan suggested
