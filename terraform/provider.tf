@@ -13,7 +13,7 @@ terraform {
 # to real AWS. To target real AWS later, delete the endpoints block and the
 # skip_* flags and supply real credentials.
 provider "aws" {
-  region                      = "us-east-1"
+  region                      = var.region
   access_key                  = "test"
   secret_key                  = "test"
   s3_use_path_style           = true
