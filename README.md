@@ -1,5 +1,7 @@
 # infra-lab
 
+[![ci](https://github.com/Kalmi91/infra-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/Kalmi91/infra-lab/actions/workflows/ci.yml)
+
 Demonstrates **Terraform + AWS + Kubernetes + monitoring + load testing** by
 building a complete, reproducible cloud-style environment.
 
@@ -75,13 +77,13 @@ infra-lab/
 └── Makefile            # up / test / dashboard / down
 ```
 
-## Learning roadmap (6 weeks)
+## What it demonstrates
 
-- **Week 1–2** — Terraform basics: provider, VPC, IAM, S3 against LocalStack.
-- **Week 3** — kind cluster + Helm: deploy Postgres + a demo app.
-- **Week 4** — Prometheus + Grafana stack, wire app metrics, build a dashboard.
-- **Week 5** — k6 load tests feeding results into Grafana.
-- **Week 6** — GitHub Actions CI, polish README + architecture diagram.
+- **Terraform** against LocalStack: VPC, public subnets, internet gateway, route table, security group, an IAM role with a least-privilege S3 read policy, and a versioned S3 bucket with public access blocked (`terraform/`).
+- **Kubernetes and Helm** on kind: a Postgres chart and a chart for the Go demo-app (`helm/`).
+- **Observability**: Prometheus and Grafana from kube-prometheus-stack, a ServiceMonitor for the app, and a Grafana dashboard shipped as a ConfigMap.
+- **Load testing**: a k6 ramping-load script (`k6-tests/load.js`) that can stream results into Prometheus.
+- **CI** (GitHub Actions): terraform fmt and validate, tflint, Go vet, build and test, hadolint and an image build, helm lint and kubeconform, k6 inspect.
 
 ## More docs
 

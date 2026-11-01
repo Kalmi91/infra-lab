@@ -82,6 +82,17 @@ func main() {
 		}
 	}
 
+	log.Printf("demo-app %s listening on %s", version, addr)
+	srv := &http.Server{
+		Addr:              addr,
+		Handler:           newMux(db),
+		ReadHeaderTimeout: 5 * time.Second,
+	}
+	log.Fatal(srv.ListenAndServe())
+}
+
+// newMux wires the HTTP routes; split out of main so tests can drive it.
+func newMux(db *sql.DB) *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", instrument("/", func(w http.ResponseWriter, _ *http.Request) {
 		fmt.Fprintf(w, "infra-lab demo-app\nversion: %s\ndb: %s\n", version, dbStatus(db))
@@ -91,14 +102,7 @@ func main() {
 		fmt.Fprintln(w, "ok")
 	}))
 	mux.Handle("/metrics", promhttp.Handler())
-
-	log.Printf("demo-app %s listening on %s", version, addr)
-	srv := &http.Server{
-		Addr:              addr,
-		Handler:           mux,
-		ReadHeaderTimeout: 5 * time.Second,
-	}
-	log.Fatal(srv.ListenAndServe())
+	return mux
 }
 
 func envOr(k, def string) string {
