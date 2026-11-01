@@ -16,7 +16,7 @@ case ":$PATH:" in
      echo '  export PATH="$HOME/.local/bin:$PATH"' ;;
 esac
 
-TF_VERSION="1.10.5"
+TF_VERSION="1.17.1"
 KIND_VERSION="v0.27.0"
 K6_VERSION="v0.57.0"
 
