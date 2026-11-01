@@ -1,5 +1,5 @@
 # Multi-stage build -> tiny distroless image (~10MB, no shell, non-root).
-FROM golang:1.23 AS build
+FROM golang:1.27.3 AS build
 WORKDIR /src
 COPY go.mod go.sum ./
 RUN go mod download
@@ -10,5 +10,5 @@ RUN CGO_ENABLED=0 go build -ldflags="-s -w -X main.version=${VERSION}" -o /demoa
 FROM gcr.io/distroless/static:nonroot
 COPY --from=build /demoapp /demoapp
 EXPOSE 8080
-USER nonroot:nonroot
+USER 65532:65532
 ENTRYPOINT ["/demoapp"]
