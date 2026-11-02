@@ -55,7 +55,7 @@ trade-off.
 - **Trade-off:** Less control-plane visibility; irrelevant on kind anyway.
 
 ## ADR-009 — Local Postgres Helm chart over the Bitnami chart
-- **Context:** Need a Postgres (RDS substitute). The plan suggested
+- **Context:** Need a Postgres (RDS substitute). A common choice is
   `bitnami/postgresql`.
 - **Decision:** Author a minimal local Helm chart (`helm/postgres/`) using the
   official `postgres:16-alpine` Docker Hub image.
@@ -66,9 +66,10 @@ trade-off.
   exporter). Not needed for a $0 ephemeral demo; would revisit for production.
 
 ## ADR-008 — GitHub Actions for CI
-- **Context:** Existing experience is Jenkins; the gap analysis flagged
-  GitHub Actions as a missing skill.
-- **Decision:** CI runs on GitHub Actions (terraform fmt/validate now; tflint,
-  helm lint, k6, app build later).
-- **Consequence:** Closes a named CV gap with a public, reviewable pipeline.
+- **Context:** The repo lives on GitHub, so the checks for Terraform, Helm, the
+  Go app and the k6 script can run next to the code.
+- **Decision:** CI runs on GitHub Actions: terraform fmt/validate, tflint,
+  go vet/build/test, hadolint + image build, helm lint + kubeconform, k6 inspect.
+- **Consequence:** The pipeline is public and reviewable, and every PR runs the
+  same checks.
 - **Trade-off:** None meaningful for this project.

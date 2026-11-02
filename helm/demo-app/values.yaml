@@ -11,12 +11,12 @@ service:
 # DSN for the postgres chart's Service (in the `data` namespace).
 databaseUrl: "postgres://app:app-password@postgres.data.svc.cluster.local:5432/appdb?sslmode=disable"
 
-# Create a ServiceMonitor so kube-prometheus-stack scrapes /metrics (Q4).
+# Create a ServiceMonitor so kube-prometheus-stack scrapes /metrics.
 serviceMonitor:
   enabled: true
   interval: 15s
 
-# Ship a Grafana dashboard as a sidecar-discovered ConfigMap (Q5).
+# Ship a Grafana dashboard as a sidecar-discovered ConfigMap.
 dashboard:
   enabled: true
 
