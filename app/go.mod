@@ -3,7 +3,7 @@ module github.com/kalmi/infra-lab-demo-app
 go 1.27
 
 require (
-	github.com/lib/pq v1.10.9
+	github.com/lib/pq v1.12.3
 	github.com/prometheus/client_golang v1.20.5
 )
 
