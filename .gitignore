@@ -13,7 +13,3 @@ kubeconfig
 # Local
 .env
 *.log
-
-# local-only working docs
-BUILD.md
-docs/PORTFOLIO.md
