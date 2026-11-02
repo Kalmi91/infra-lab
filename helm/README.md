@@ -18,6 +18,7 @@ Grafana login: **admin / prom-operator**.
 The Grafana Service is named `grafana` (via `fullnameOverride`) so the
 port-forward target is stable regardless of the Helm release name.
 
-> Postgres + the demo app and their ServiceMonitors land here later (Week 3–5).
+> Postgres and the demo app (with its ServiceMonitor) are separate charts:
+> `helm/postgres` and `helm/demo-app`.
 > `serviceMonitorSelectorNilUsesHelmValues: false` lets Prometheus discover
 > ServiceMonitors created outside this release.

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Installs the infra-lab toolchain into ~/.local/bin and makes sure Docker is
-# usable. Run this once, on the HOST shell (not inside the Claude Code sandbox —
-# it needs the Docker daemon and real sudo).
+# usable. Run this once, on the HOST shell; it needs the Docker daemon and
+# real sudo.
 #
 #   ./scripts/bootstrap.sh
 #

@@ -23,8 +23,7 @@ building a complete, reproducible cloud-style environment.
 | CI | CodeBuild | GitHub Actions | pipeline authoring |
 
 > LocalStack Community does **not** include EKS or RDS (Pro-only). That is why
-> the cluster is `kind` and the database is an in-cluster Postgres chart. The
-> README is explicit about this so it is honest on the CV.
+> the cluster is `kind` and the database is an in-cluster Postgres chart.
 
 ## Architecture
 
